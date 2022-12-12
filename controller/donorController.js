@@ -1,11 +1,5 @@
-// import axios from "axios";
+import axios from "axios";
 import Donor from "../models/Donor.js";
-
-// const getl = async () => {
-//   await axios.get('https://app-eight-pi.vercel.app/donors').then(res => console.log(res.data))
-// }
-
-// getl()
 
 class donorController {
   async addDonor(req, res) {
