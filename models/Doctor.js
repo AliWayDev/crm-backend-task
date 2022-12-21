@@ -27,7 +27,7 @@ const Doctor = new Schema({
     cuz: { type: String },
     ru: { type: String },
   },
-  WorkingDepartment: {
+  workingDepartment: {
     uz: { type: String },
     cuz: { type: String },
     ru: { type: String },

@@ -8,7 +8,8 @@ const apiRouter = new Router();
 
 // Doctors
 apiRouter.post("/doctors", [authMiddleWare()], doctorController.addDoctor);
-apiRouter.post("/doctors/upload/:id", [authMiddleWare()], doctorController.imgUpload);
+apiRouter.post("/doctors/upload/:id", [authMiddleWare()], doctorController.uploads);
+apiRouter.put("/doctors/update/:id", [authMiddleWare()], doctorController.updateUploads);
 apiRouter.get("/doctors", doctorController.getDoctors);
 apiRouter.get("/doctors/:id", doctorController.getOneDoctor);
 apiRouter.put("/doctors/:id", [authMiddleWare()], doctorController.updateDoctor);

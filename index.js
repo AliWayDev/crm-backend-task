@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(express.static('public'));
+app.use(express.static(__dirname + '/public'));
 app.use(fileUpload({}))
 app.use(express.json());
 

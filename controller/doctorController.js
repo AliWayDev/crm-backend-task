@@ -1,5 +1,6 @@
 const Doctor = require("../models/Doctor.js");
 const path = require("path");
+const fs = require("fs");
 
 class doctorController {
   async addDoctor(req, res) {
@@ -14,7 +15,7 @@ class doctorController {
     }
   }
 
-  async imgUpload(req, res) {
+  async uploads(req, res) {
     try {
       const file = req.files.doctorImage
       const { id } = req.params
@@ -33,15 +34,36 @@ class doctorController {
     }
   }
 
+  async updateUploads(req, res) {
+    try {
+      const file = req.files.doctorImage
+      const { id } = req.params
+      const ext = path.extname(file.name)
+      const URL = "./public/doctors/" + id + ext
+
+      let urlTo = path.normalize(path.join(__dirname, '..'));
+      fs.unlinkSync(urlTo + `/public/doctors/${id}.jpg`)
+
+      file.mv(URL, (err) => {
+        if (err) {
+          console.log(err);
+        }
+      })
+
+      return res.json({ msg: "Succesfuly updated!" })
+    } catch (err) {
+      res.status(500).json({ msg: `${err}` });
+    }
+  }
+
   async getUploads(req, res) {
     try {
       const { id } = req.params
 
-      const URL = '/public/doctors/' + `${id}` + ".jpg"
+      let urlTo = path.normalize(path.join(__dirname, '..'));
 
-      console.log(URL);
+      return res.sendFile(urlTo + `/public/doctors/${id}.jpg`);
 
-      return res.sendFile(URL);
     } catch (err) {
       res.status(500).json({ msg: `${err}` });
     }
@@ -98,6 +120,10 @@ class doctorController {
         res.status(400).json({ msg: "Doctor's Id not found!" });
       }
       await Doctor.findByIdAndRemove(id);
+
+      let urlTo = path.normalize(path.join(__dirname, '..'));
+      fs.unlinkSync(urlTo + `/public/doctors/${id}.jpg`)
+
       return res.status(200).json({ msg: "Doctor deleted!" });
     } catch (e) {
       res.status(500).json(e);
