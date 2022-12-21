@@ -1,6 +1,6 @@
-import jsonwebtoken from "jsonwebtoken";
+const jsonwebtoken = require("jsonwebtoken");
 
-export const JWT_SECRET =
+const JWT_SECRET =
   "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 
 class authController {
@@ -26,4 +26,4 @@ class authController {
   }
 }
 
-export default new authController();
+module.exports = new authController();

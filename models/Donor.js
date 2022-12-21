@@ -1,4 +1,4 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 
 const Donor = new Schema({
   firstName: { type: String },
@@ -9,4 +9,4 @@ const Donor = new Schema({
   isBloodType: { type: Boolean },
 });
 
-export default model("Donor", Donor);
+module.exports = model("Donor", Donor);

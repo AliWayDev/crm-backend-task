@@ -1,7 +1,7 @@
-import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../controller/authController.js";
+const jwt = require("jsonwebtoken");
+const JWT_SECRET = "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 
-export default () => {
+module.exports = () => {
   return (req, res, next) => {
     const token = req.headers["authorization"];
     if (!token) {

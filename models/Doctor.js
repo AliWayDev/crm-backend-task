@@ -1,15 +1,43 @@
-import { Schema, model } from "mongoose";
+const { Schema, model } = require("mongoose");
 
 const Doctor = new Schema({
-  fullName: { type: String },
-  doctorImage: { type: String },
-  description: { type: String },
-  specialty: { type: String },
-  workActivity: { type: String },
-  scientificDegree: { type: String },
-  WorkingDepartment: { type: String },
+  fullName: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
+  avatar: { type: String },
+  description: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
+  specialty: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
+  workActivity: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
+  scientificDegree: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
+  WorkingDepartment: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
   departmentId: { type: String, unique: true, required: true },
-  scientificWork: { type: String },
+  scientificWork: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
 });
 
-export default model("Doctor", Doctor);
+module.exports = model("Doctor", Doctor);

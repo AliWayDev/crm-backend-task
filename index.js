@@ -1,12 +1,18 @@
-import express from "express";
-import mongoose from "mongoose";
-import router from "./routers/router.js";
-import apiRouters from "./routers/apiRouter.js";
+const express = require("express");
+const mongoose = require("mongoose");
+const router = require("./routers/router.js");
+const apiRouters = require("./routers/apiRouter.js");
+const fileUpload = require("express-fileupload");
+const path = require('path')
 
 const PORT = process.env.PORT || 5000;
 
 const app = express();
+
+app.use(express.static('public'));
+app.use(fileUpload({}))
 app.use(express.json());
+
 app.use("/auth", router);
 app.use("/api", apiRouters);
 

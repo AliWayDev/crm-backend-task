@@ -1,5 +1,4 @@
-import axios from "axios";
-import Donor from "../models/Donor.js";
+const Donor = require("../models/Donor.js");
 
 class donorController {
   async addDonor(req, res) {
@@ -71,73 +70,4 @@ class donorController {
   }
 }
 
-export default new donorController();
-
-/** const express = require('express')
-const app = express();
-const port = 3000
-
-const posts = [
-  {
-    id: 1,
-    title: {
-      ru: 'hello world',
-      kuz: 'hello world',
-    },
-    content: {
-      uz: 'hello worldwefwefwe',
-      ru: 'hello worldfwefwefwe',
-      kuz: 'hello worldwefwefwefwefwefwefwe',
-    },
-  },
-  {
-    id: 1,
-    title: {
-      uz: 'hello world',
-      ru: 'hello world',
-      kuz: 'hello world',
-    },
-    content: {
-      ru: 'hello worldfwefwefwe',
-      kuz: 'hello worldwefwefwefwefwefwefwe',
-    },
-  },
-  {
-    id: 1,
-    title: {
-      uz: 'hello world',
-      ru: 'hello world',
-      kuz: 'hello world',
-    },
-    content: {
-      uz: 'hello worldwefwefwe',
-      kuz: 'hello worldwefwefwefwefwefwefwe',
-    },
-  }
-
-]
-
-function serializePosts(lang, data) {
-  const res = {}
-  for (let key in data) {
-
-    if (typeof data[key] == 'object') {
-      if (data[key][lang]){
-        data[key] = data[key][lang]
-      }
-    }
-  }
-  console.log(data);
-  return data;
-}
-
-app.get('/posts', (req, res) => {
-  const lang = req.query['lang'];
-
-  const serializedPosts = posts.map((post) => serializePosts(lang, post));
-  res.json(serializedPosts);
-})
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`)
-}) **/
+module.exports = new donorController();
