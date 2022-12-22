@@ -71,8 +71,37 @@ class doctorController {
 
   async getDoctors(req, res) {
     try {
-      const doctors = await Doctor.find();
-      return res.json(doctors);
+      const page = parseInt(req.query.page) || 0;
+      const limit = parseInt(req.query.limit) || 10;
+
+      const result = {};
+      const total = await Doctor.countDocuments().exec();
+
+      let startIndex = page * limit;
+      const endIndex = (page + 1) * limit;
+      result.total = total;
+
+      if (startIndex > 0) {
+        result.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+      if (endIndex < (await Doctor.countDocuments().exec())) {
+        result.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
+
+      result.data = await Doctor.find()
+        .sort("-_id")
+        .skip(startIndex)
+        .limit(limit)
+        .exec();
+      result.rowsPerPage = limit;
+
+      return res.status(200).json({ data: result });
     } catch (e) {
       res.status(500).json(e);
     }
