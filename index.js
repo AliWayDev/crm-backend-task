@@ -9,9 +9,10 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 
-app.use(express.static(__dirname + '/public'));
-app.use(fileUpload({}))
+app.use(cors())
 app.use(express.json());
+app.use(fileUpload({}))
+app.use(express.static(__dirname + '/public'));
 
 app.use("/auth", router);
 app.use("/api", apiRouters);
