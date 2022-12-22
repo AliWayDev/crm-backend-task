@@ -6,7 +6,7 @@ const Doctor = new Schema({
     cuz: { type: String },
     ru: { type: String },
   },
-  avatar: { type: String },
+  doctorImage: { type: String },
   description: {
     uz: { type: String },
     cuz: { type: String },
@@ -32,7 +32,7 @@ const Doctor = new Schema({
     cuz: { type: String },
     ru: { type: String },
   },
-  departmentId: { type: String, unique: true, required: true },
+  departmentId: { type: String, required: true },
   scientificWork: {
     uz: { type: String },
     cuz: { type: String },

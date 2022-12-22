@@ -6,7 +6,7 @@ const path = require('path');
 
 const apiRouter = new Router();
 
-        // Doctors
+// Doctors
 apiRouter.post("/doctors", [authMiddleWare()], doctorController.addDoctor);
 apiRouter.post("/doctors/upload/:id", [authMiddleWare()], doctorController.uploads);
 apiRouter.put("/doctors/update/:id", [authMiddleWare()], doctorController.updateUploads);

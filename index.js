@@ -4,6 +4,7 @@ const router = require("./routers/router.js");
 const apiRouters = require("./routers/apiRouter.js");
 const fileUpload = require("express-fileupload");
 const path = require('path')
+const cors = require('cors')
 
 const PORT = process.env.PORT || 5000;
 
