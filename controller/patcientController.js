@@ -24,16 +24,40 @@ class patcientController {
 
     async getAll(req, res) {
         try {
-            const patcients = await Patcient.find()
+            const page = parseInt(req.query.page) || 0;
+            const limit = parseInt(req.query.limit) || 10;
 
-            if (!patcients) {
-                return res.status(404).json({ msg: "Pacients not found!" })
+            const result = {};
+            const total = await Patcient.countDocuments().exec();
+
+            let startIndex = page * limit;
+            const endIndex = (page + 1) * limit;
+            result.total = total;
+
+            if (startIndex > 0) {
+                result.previous = {
+                    page: page - 1,
+                    limit: limit,
+                };
             }
+            if (endIndex < (await Patcient.countDocuments().exec())) {
+                result.next = {
+                    page: page + 1,
+                    limit: limit,
+                };
+            }
+
+            result.data = await Patcient.find()
+                .sort("-_id")
+                .skip(startIndex)
+                .limit(limit)
+                .exec();
+            result.rowsPerPage = limit;
 
             return res.status(200).json({
                 msg: "OK",
-                patcients
-            })
+                data: result
+            });
         } catch (err) {
             return res.status(500).json({
                 msg: "Oops server dawn!"
