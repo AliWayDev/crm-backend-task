@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const authMiddleWare = require("../middleware/authMiddleWare.js");
-const NewsController = require("../controller/NewsController.js");
+const NewsController = require("../controller/newsController.js");
 
 const router = Router({ mergeParams: true });
 
