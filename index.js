@@ -1,7 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
-const router = require("./routers/router.js");
-const apiRouters = require("./routers/apiRouter.js");
+const router = require("./routers/index");
 const fileUpload = require("express-fileupload");
 const path = require('path')
 const cors = require('cors')
@@ -15,8 +14,7 @@ app.use(express.json());
 app.use(fileUpload({}))
 app.use(express.static(__dirname + '/public'));
 
-app.use("/auth", router);
-app.use("/api", apiRouters);
+app.use(router);
 
 const server = async () => {
   try {
