@@ -4,7 +4,9 @@ const uploadController = require("../controller/uploadController.js");
 
 const router = Router({ mergeParams: true });
 
-router.route('/doctor/:id')
-    .get(uploadController.getUploadDoctor)
+router.route('/:id')
+    .get(uploadController.getUploads)
+    .put(uploadController.updateUploads)
+    .post(uploadController.uploads)
 
 module.exports = router

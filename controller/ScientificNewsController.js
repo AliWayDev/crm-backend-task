@@ -1,6 +1,6 @@
 const ScientificNews = require("../models/ScientificNews.js");
 
-class ScientificNewsController {
+class scientificNewsController {
     async addNews(req, res) {
         try {
             const newsData = req.body;
@@ -99,4 +99,4 @@ class ScientificNewsController {
     }
 }
 
-module.exports = new ScientificNewsController();
+module.exports = new scientificNewsController();

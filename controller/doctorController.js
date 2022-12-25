@@ -1,3 +1,4 @@
+const Department = require("../models/Department.js");
 const Doctor = require("../models/Doctor.js");
 
 class doctorController {
@@ -6,6 +7,14 @@ class doctorController {
       const doctorData = req.body;
 
       let doctor = await Doctor.create(doctorData);
+
+      await Department.findByIdAndUpdate(doctor.departmentId, {
+        $push: {
+          doctors: [
+            doctor
+          ]
+        }
+      })
 
       return res.status(201).json({ msg: "OK", doctor });
     } catch (err) {
@@ -76,27 +85,47 @@ class doctorController {
 
   async updateDoctor(req, res) {
     try {
-      const doctorData = req.body;
+      const body = req.body;
       const { id } = req.params;
 
-      if (!id) {
-        return res.status(400).json({ msg: "Doctor's Id not found!" });
+      const doctor = await Doctor.findById(id)
+
+      if (!doctor) {
+        return res.status(400).json({ msg: "Doctor's Id incorrect!" });
       }
 
-      const updatedDoctor = await Doctor.findByIdAndUpdate(id, doctorData, {
-        new: true,
+      await Department.updateOne({
+        _id: doctor.departmentId
+      }, {
+        $pull: {
+          doctors: {
+            $in: [doctor._id]
+          }
+        },
+        multi: true
       });
+
+      const updatedDoctor = await Doctor.findByIdAndUpdate(id, body);
 
       if (!updatedDoctor) {
         return res.status(400).json({ msg: "Oops check your payload!" })
       }
+
+      await Department.findByIdAndUpdate(body.departmentId, {
+        $push: {
+          doctors: [
+            updatedDoctor
+          ]
+        }
+      })
 
       return res.status(200).json({
         msg: "OK",
         updatedDoctor
       });
     } catch (e) {
-      res.status(500).json(e);
+      console.log(e);
+      return res.status(500).json(e);
     }
   }
 
@@ -108,6 +137,19 @@ class doctorController {
         return res.status(400).json({ msg: "Doctor's Id not found!" });
       }
 
+      const doctor = await Doctor.findById(id)
+
+      await Department.updateOne({
+        _id: doctor.departmentId
+      }, {
+        $pull: {
+          doctors: {
+            $in: [doctor._id]
+          }
+        },
+        multi: true
+      });
+
       await Doctor.findByIdAndRemove(id);
 
       return res.status(410).json({ msg: "Doctor deleted!" });
@@ -118,61 +160,3 @@ class doctorController {
 }
 
 module.exports = new doctorController();
-
- // let urlTo = path.normalize(path.join(__dirname, '..'));
-      // fs.unlinkSync(urlTo + `/public/doctors/${id}.jpg`)
-
-
-// async uploads(req, res) {
-  //   try {
-  //     const file = req.files.doctorImage
-  //     const { id } = req.params
-  //     const ext = path.extname(file.name)
-  //     const URL = "./public/doctors/" + id + ext
-
-  //     file.mv(URL, (err) => {
-  //       if (err) {
-  //         console.log(err);
-  //       }
-  //     })
-
-  //     return res.json({ msg: "Succesfuly uploaded!" })
-  //   } catch (err) {
-  //     res.status(500).json({ msg: `${err}` });
-  //   }
-  // }
-
-  // async updateUploads(req, res) {
-  //   try {
-  //     const file = req.files.doctorImage
-  //     const { id } = req.params
-  //     const ext = path.extname(file.name)
-  //     const URL = "./public/doctors/" + id + ext
-
-  //     let urlTo = path.normalize(path.join(__dirname, '..'));
-  //     fs.unlinkSync(urlTo + `/public/doctors/${id}.jpg`)
-
-  //     file.mv(URL, (err) => {
-  //       if (err) {
-  //         console.log(err);
-  //       }
-  //     })
-
-  //     return res.json({ msg: "Succesfuly updated!" })
-  //   } catch (err) {
-  //     res.status(500).json({ msg: `${err}` });
-  //   }
-  // }
-
-  // async getUploads(req, res) {
-  //   try {
-  //     const { id } = req.params
-
-  //     let urlTo = path.normalize(path.join(__dirname, '..'));
-
-  //     return res.sendFile(urlTo + `/public/doctors/${id}.jpg`);
-
-  //   } catch (err) {
-  //     res.status(500).json({ msg: `${err}` });
-  //   }
-  // }

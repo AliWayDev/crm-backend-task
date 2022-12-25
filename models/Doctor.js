@@ -38,6 +38,10 @@ const Doctor = new Schema({
     cuz: { type: String },
     ru: { type: String },
   },
+  department: {
+    type: Schema.Types.ObjectId,
+    ref: "Department"
+  }
 });
 
 module.exports = model("Doctor", Doctor);
