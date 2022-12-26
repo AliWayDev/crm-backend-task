@@ -27,7 +27,7 @@ class departmentController {
 
     async getAll(req, res) {
         try {
-            const departments = await Department.find().populate("doctor")
+            const departments = await Department.find()
 
             if (!departments) {
                 return res.status(404).json({
@@ -56,7 +56,7 @@ class departmentController {
                 })
             }
 
-            const department = await Department.findById(id).populate("doctor")
+            const department = await Department.findById(id)
 
             if (!department) {
                 return res.status(404).json({
