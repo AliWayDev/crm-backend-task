@@ -6,7 +6,6 @@ const Doctor = new Schema({
     cuz: { type: String },
     ru: { type: String },
   },
-  doctorImage: { type: String },
   description: {
     uz: { type: String },
     cuz: { type: String },
