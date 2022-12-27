@@ -32,6 +32,11 @@ const Doctor = new Schema({
     ru: { type: String },
   },
   departmentId: { type: String, required: true },
+  departmentName: {
+    uz: { type: String },
+    cuz: { type: String },
+    ru: { type: String },
+  },
   scientificWork: {
     uz: { type: String },
     cuz: { type: String },

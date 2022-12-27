@@ -6,14 +6,20 @@ class doctorController {
     try {
       const doctorData = req.body;
 
-      let doctor = await Doctor.create(doctorData);
+      const newDoctor = await Doctor.create(doctorData);
 
-      await Department.findByIdAndUpdate(doctor.departmentId, {
+      await Department.findByIdAndUpdate(newDoctor.departmentId, {
         $push: {
           doctors: [
-            doctor
+            newDoctor
           ]
         }
+      })
+
+      const department = await Department.findById(newDoctor.departmentId)
+
+      const doctor = await Doctor.findByIdAndUpdate(newDoctor._id, {
+        $set: { departmentName: department.name }
       })
 
       return res.status(201).json({ msg: "OK", doctor });

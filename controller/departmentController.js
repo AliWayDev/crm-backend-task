@@ -35,7 +35,7 @@ class departmentController {
 
             let startIndex = page * limit;
             const endIndex = (page + 1) * limit;
-            result.total = total;   
+            result.total = total;
 
             if (startIndex > 0) {
                 result.previous = {
