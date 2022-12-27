@@ -75,7 +75,7 @@ class departmentController {
                 })
             }
 
-            const department = await Department.findById(id)
+            const department = await Department.findById(id).populate("doctors")
 
             if (!department) {
                 return res.status(404).json({
