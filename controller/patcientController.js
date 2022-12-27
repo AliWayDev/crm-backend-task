@@ -126,7 +126,7 @@ class patcientController {
 
             await Patcient.findByIdAndRemove(id)
 
-            return res.status(410).json({ msg: "Donor deleted!" });
+            return res.status(200).json({ msg: "Donor deleted!" });
         } catch (err) {
             return res.status(500).json({
                 msg: "Oops server dawn!"

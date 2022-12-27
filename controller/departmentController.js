@@ -27,18 +27,37 @@ class departmentController {
 
     async getAll(req, res) {
         try {
-            const departments = await Department.find()
+            const page = parseInt(req.query.page) || 0;
+            const limit = parseInt(req.query.limit) || 10;
 
-            if (!departments) {
-                return res.status(404).json({
-                    msg: "Sorry, there is no any Departments!"
-                })
+            const result = {};
+            const total = await Department.countDocuments().exec();
+
+            let startIndex = page * limit;
+            const endIndex = (page + 1) * limit;
+            result.total = total;
+
+            if (startIndex > 0) {
+                result.previous = {
+                    page: page - 1,
+                    limit: limit,
+                };
+            }
+            if (endIndex < (await Department.countDocuments().exec())) {
+                result.next = {
+                    page: page + 1,
+                    limit: limit,
+                };
             }
 
-            return res.status(200).json({
-                msg: "OK",
-                departments
-            })
+            result.data = await Department.find().populate('doctors')
+                .sort("-_id")
+                .skip(startIndex)
+                .limit(limit)
+                .exec();
+            result.rowsPerPage = limit;
+
+            return res.status(200).json({ msg: "OK", data: result });
         } catch (err) {
             res.status(500).json({
                 msg: "Server dawn!"
@@ -117,7 +136,7 @@ class departmentController {
 
             await Department.findByIdAndRemove(id)
 
-            return res.status(410).json({
+            return res.status(200).json({
                 msg: "Department deleted!",
             })
         } catch (err) {

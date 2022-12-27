@@ -152,7 +152,7 @@ class doctorController {
 
       await Doctor.findByIdAndRemove(id);
 
-      return res.status(410).json({ msg: "Doctor deleted!" });
+      return res.status(200).json({ msg: "Doctor deleted!" });
     } catch (e) {
       res.status(500).json(e);
     }

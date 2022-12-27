@@ -18,12 +18,37 @@ class NewsController {
 
     async getNews(req, res) {
         try {
-            const news = await News.find();
+            const page = parseInt(req.query.page) || 0;
+            const limit = parseInt(req.query.limit) || 10;
 
-            return res.status(200).json({
-                msg: "OK",
-                news
-            });
+            const result = {};
+            const total = await News.countDocuments().exec();
+
+            let startIndex = page * limit;
+            const endIndex = (page + 1) * limit;
+            result.total = total;
+
+            if (startIndex > 0) {
+                result.previous = {
+                    page: page - 1,
+                    limit: limit,
+                };
+            }
+            if (endIndex < (await News.countDocuments().exec())) {
+                result.next = {
+                    page: page + 1,
+                    limit: limit,
+                };
+            }
+
+            result.data = await News.find()
+                .sort("-_id")
+                .skip(startIndex)
+                .limit(limit)
+                .exec();
+            result.rowsPerPage = limit;
+
+            return res.status(200).json({ msg: "OK", data: result });
         } catch (e) {
             res.status(500).json({ msg: "Server down!" });
         }
@@ -84,7 +109,7 @@ class NewsController {
 
             await News.findByIdAndRemove(id);
 
-            return res.status(410).json({ msg: "News deleted!" });
+            return res.status(200).json({ msg: "News deleted!" });
         } catch (e) {
             res.status(500).json({ msg: "Server down!" });
         }

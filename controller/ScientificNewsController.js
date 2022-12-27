@@ -22,16 +22,37 @@ class scientificNewsController {
 
     async getNews(req, res) {
         try {
-            const news = await ScientificNews.find();
+            const page = parseInt(req.query.page) || 0;
+            const limit = parseInt(req.query.limit) || 10;
 
-            if (!news) {
-                return res.status(404).json({ msg: "Oops News not found!" })
+            const result = {};
+            const total = await ScientificNews.countDocuments().exec();
+
+            let startIndex = page * limit;
+            const endIndex = (page + 1) * limit;
+            result.total = total;
+
+            if (startIndex > 0) {
+                result.previous = {
+                    page: page - 1,
+                    limit: limit,
+                };
+            }
+            if (endIndex < (await ScientificNews.countDocuments().exec())) {
+                result.next = {
+                    page: page + 1,
+                    limit: limit,
+                };
             }
 
-            return res.status(200).json({
-                msg: "OK",
-                news
-            });
+            result.data = await ScientificNews.find()
+                .sort("-_id")
+                .skip(startIndex)
+                .limit(limit)
+                .exec();
+            result.rowsPerPage = limit;
+
+            return res.status(200).json({ msg: "OK", data: result });
         } catch (e) {
             res.status(500).json({ msg: "Server down!" });
         }
@@ -92,7 +113,7 @@ class scientificNewsController {
 
             await ScientificNews.findByIdAndRemove(id);
 
-            return res.status(410).json({ msg: "News deleted!" });
+            return res.status(200).json({ msg: "News deleted!" });
         } catch (e) {
             res.status(500).json({ msg: "Server down!" });
         }

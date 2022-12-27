@@ -18,12 +18,37 @@ class donorController {
 
   async getDonors(req, res) {
     try {
-      const donors = await Donor.find();
+      const page = parseInt(req.query.page) || 0;
+      const limit = parseInt(req.query.limit) || 10;
 
-      return res.status(200).json({
-        msg: "OK",
-        donors
-      });
+      const result = {};
+      const total = await Donor.countDocuments().exec();
+
+      let startIndex = page * limit;
+      const endIndex = (page + 1) * limit;
+      result.total = total;
+
+      if (startIndex > 0) {
+        result.previous = {
+          page: page - 1,
+          limit: limit,
+        };
+      }
+      if (endIndex < (await Donor.countDocuments().exec())) {
+        result.next = {
+          page: page + 1,
+          limit: limit,
+        };
+      }
+
+      result.data = await Donor.find()
+        .sort("-_id")
+        .skip(startIndex)
+        .limit(limit)
+        .exec();
+      result.rowsPerPage = limit;
+
+      return res.status(200).json({ msg: "OK", data: result });
     } catch (e) {
       res.status(500).json({ msg: "Server down!" });
     }
@@ -84,7 +109,7 @@ class donorController {
 
       await Donor.findByIdAndRemove(id);
 
-      return res.status(410).json({ msg: "Donor deleted!" });
+      return res.status(200).json({ msg: "Donor deleted!" });
     } catch (e) {
       res.status(500).json({ msg: "Server down!" });
     }
