@@ -1,9 +1,7 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const router = require("./routers/index");
-const fileUpload = require("express-fileupload");
-const path = require('path')
-const cors = require('cors')
+import express from "express";
+import mongoose from "mongoose";
+import cors from 'cors'
+import apiRouter from "./routers/index.js";
 
 const PORT = process.env.PORT || 5000;
 
@@ -11,15 +9,13 @@ const app = express();
 
 app.use(cors())
 app.use(express.json());
-app.use(fileUpload({}))
-app.use(express.static(__dirname + '/public'));
 
-app.use(router);
+app.use(apiRouter);
 
 const server = async () => {
   try {
     await mongoose.connect(
-      "mongodb+srv://aliwaydev:909074402@cluster0.gqe720e.mongodb.net/?retryWrites=true&w=majority"
+      "mongodb+srv://alinurlibekov:909074402@cluster0.yi03c.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
     );
     app.listen(PORT, () => console.log("Server started" + PORT));
   } catch (e) {

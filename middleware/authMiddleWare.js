@@ -1,21 +1,18 @@
-const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 const JWT_SECRET = "goK!pusp6ThEdURUtRenOwUhAsWUCLheBazl!uJLPlS8EbreWLdrupIwabRAsiBu";
 
-module.exports = () => {
-  return (req, res, next) => {
-    const token = req.headers["authorization"];
-    if (!token) {
-      return res.status(401).send("Access Denied!");
-    } else {
-      const tokenBody = token.slice(7);
+export const authMiddleWare = (req, res, next) => {
+  const token = req.headers['authorization'];
 
-      jwt.verify(tokenBody, JWT_SECRET, (err) => {
-        if (err) {
-          console.log(`JWT Error: ${err}`);
-          return res.status(401).send("Access Denied!");
-        }
-        next();
-      });
-    }
-  };
-};
+  if (!token) {
+    return res.status(403).send({ msg: 'Token is required' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    req.user = decoded; 
+    next();
+  } catch (err) {
+    return res.status(401).send({ msg: 'Invalid token' });
+  }
+}
