@@ -69,6 +69,7 @@ class userController {
       if (await checkUserPassword(password, existsUser.password)) {
         return res.json({
           token: jsonwebtoken.sign({ user: email }, JWT_SECRET),
+          name: existsUser.name
         });
       } else {
         res.status(400).json({ msg: "Password or Password -> Uncorrect!" });
