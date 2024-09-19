@@ -167,6 +167,36 @@ class userController {
       })
     }
   }
+
+  async delete(req, res) {
+    try {
+      const usersData = req.body
+
+      if (!usersData) {
+        return res.status(404).json({
+          msg: "Oops check your payload!"
+        })
+      }
+
+      for (let i of usersData) {
+        if (i) {
+          await User.findByIdAndDelete(i)
+        } else {
+          return res.status(409).json({
+            msg: "Check the payload!"
+          })
+        }
+      }
+
+      return res.status(200).json({
+        msg: "Success!"
+      })
+    } catch (err) {
+      res.status(500).json({
+        msg: "Somthing went wrong on the server side!"
+      })
+    }
+  }
 }
 
 export default new userController();

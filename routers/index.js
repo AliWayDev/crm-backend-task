@@ -10,6 +10,7 @@ apiRouter.post("/user/register", userController.create);
 apiRouter.get("/all-users", authMiddleWare, userController.getAll);
 apiRouter.put("/users", authMiddleWare, userController.updateMany);
 apiRouter.put("/user/:id", authMiddleWare, userController.update);
+apiRouter.delete("/users", authMiddleWare, userController.delete);
 
 
 export default apiRouter;
