@@ -62,6 +62,10 @@ class userController {
         return res.status(400).json({ msg: "User Not Found" });
       }
 
+      if(existsUser.status === 'Blocked') {
+        return res.status(400).json({ msg: "User was blocked!" });
+      }
+
       const checkUserPassword = async (password, hashedPassword) => {
         try {
           console.log(compare(password, hashedPassword))
