@@ -34,11 +34,16 @@ class userController {
 
       const hashedPassword = await hashPassword(password);
 
-      await User.create(
+      const newUser = await User.create(
         { name, email, status: 'Active', password: hashedPassword }
       );
 
-      return res.status(200).json({ msg: "User was created!" });
+      return res.status(200).json({
+        msg: "User was created!", data: {
+          id: newUser.id,
+          name: newUser.name
+        }
+      });
 
     } catch (err) {
       console.log(err);
