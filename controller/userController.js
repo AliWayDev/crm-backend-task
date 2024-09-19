@@ -40,7 +40,7 @@ class userController {
 
       return res.status(200).json({
         msg: "User was created!", data: {
-          id: newUser.id,
+          id: newUser._id,
           name: newUser.name
         }
       });
